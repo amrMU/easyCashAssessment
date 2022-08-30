@@ -1,0 +1,8 @@
+{
+  "transactionAmount":200,
+  "Currency":"USD",
+  "senderPhone":"00201234567890",
+  "transactionStatus":2,
+  "transactionDate": "2021-03-29 09:36:11",
+  "transactionIdentification": "d3d29d70-1d25-11e3-8591-034165a3a613"
+}

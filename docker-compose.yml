@@ -1,0 +1,51 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: Amr
+        uid: 1000
+      context: ./deploy
+      dockerfile: Dockerfile
+    image: app-dev
+    container_name: app-dev-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - app-dev
+
+  db:
+    image: mysql:5.7
+    container_name: app-dev-db
+    restart: unless-stopped
+    ports:
+      - 3306
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: dockerdb
+      MYSQL_PASSWORD: dockerdb
+      MYSQL_USER: dockerdb
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./deploy/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - app-dev
+
+  nginx:
+    image: nginx:alpine
+    container_name: app-dev-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./deploy/nginx:/etc/nginx/conf.d/
+    networks:
+      - app-dev
+
+networks:
+  app-dev:
+    driver: bridge
